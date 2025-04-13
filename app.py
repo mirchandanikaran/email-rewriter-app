@@ -1,33 +1,26 @@
 import streamlit as st
-from openai import OpenAI
-import os
+import time
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+st.set_page_config(page_title="Dark Web Simulator", page_icon="🕵️")
 
-st.set_page_config(page_title="Polite Email Rewriter", page_icon="🤐")
+st.title("🕵️ Dark Web Simulator (Educational)")
+st.caption("Explore a simulated darknet safely. Learn how it works — without risk.")
 
-st.title("🧼 Passive-Aggressive Email Rewriter")
-st.caption("Turn rude messages into polite emails powered by AI")
+st.markdown("💻 **Terminal:** Type your commands below to explore.")
+st.info("Try commands like: `connect darknet`, `visit hidden wiki`, `open marketplace`, `search bitcoin`, `exit`")
 
-rude_input = st.text_area("✍️ Enter the rude message here:")
+# Initialize session state for terminal history
+if "history" not in st.session_state:
+    st.session_state.history = []
 
-if st.button("Rewrite It ✨"):
-    if rude_input.strip() == "":
-        st.warning("Please enter a message to rewrite.")
-    else:
-        with st.spinner("Rewriting politely..."):
-            prompt = f"""Rewrite the following rude or blunt sentence into a professional, polite, and workplace-appropriate message:
+user_input = st.text_input(">>>", key="input")
 
-Rude: "{rude_input}"
-Polite:"""
-
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",  # ✅ safe default model
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.7,
-                max_tokens=100
-            )
-
-            polite_output = response.choices[0].message.content.strip()
-            st.success("Here's your polite message:")
-            st.write(polite_output)
+# Response logic
+def process_command(cmd):
+    cmd = cmd.lower().strip()
+    if cmd == "connect darknet":
+        return "🔐 Connecting via Tor network...\n🧅 Onion routing initialized across 3 relays."
+    elif cmd == "visit hidden wiki":
+        return "📚 Loaded: Hidden Wiki - A list of .onion sites (simulated)\n- Marketplace\n- Forums\n- Whistleblowing portals"
+    elif cmd == "open marketplace":
+        return "🛒 You entered a fake market: 'Silkplace v2'\nListings: Fake IDs
